@@ -144,7 +144,7 @@
   unsigned long te =580; //le temps entre les envoies
   unsigned long t1 = 0; //le temps du dernier point inséré
   unsigned long t2 = 0; //le temps du dernier point capté
-  uint16_t ti = 30; //le temps entre chaque insertion
+  uint16_t ti = 30; //le te/mps entre chaque insertion
   unsigned long t3 = 0; //le temps du dernier envoie
   String previousUnixTime="0";
   uint16_t iterations=880; //sleeping time = iterations X 8 Seconds
