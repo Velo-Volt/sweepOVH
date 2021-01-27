@@ -333,7 +333,7 @@ bool httpPostFromTo(uint16_t p1, uint16_t p2) {
           {
             if (j == (i * SizeRec)) {Serial.print("{\"P\":\"");delay(1);}
             uint16_t test = fram.read8(j);
-            if ((test==0) ){sprintf(Buffer, "%c", 120); //x
+            if ((test==0) ){sprintf(Buffer, "%c", 121); //y
             }else{sprintf(Buffer, "%c", test);}
             Serial.write(Buffer);
             delay(1);
@@ -655,17 +655,10 @@ bool getGpsData() {
   if ((used_satellites.length()!=2)){used_satellites="01";}
   if ((course.length()!=6)){course="0357.6";}
   if ((lastUnixTime).length()!=10){lastUnixTime="1600000000";}
-  // badCharChecker(fixStatus);
-  // badCharChecker(latitude);
-  // badCharChecker(longitude);
-  // badCharChecker(speed);
-  // badCharChecker(used_satellites);
-  // badCharChecker(course);
-  // badCharChecker(batteryLevel());
-  // badCharChecker(lastUnixTime);
+
 
   if (onOff) {onOff = false;}
-  if ((fixStatus.toInt() == 1) && (latitude.toInt() > 20) && (longitude.toInt() < 0)&&(badCharCounter==0)&&(lastUnixTime!=previousUnixTime)) {
+  if ((fixStatus.toInt() == 1) && (latitude.toInt() > 20) && (longitude.toInt() < 0)&&(lastUnixTime!=previousUnixTime)) {
     noGPS=false;
     previousUnixTime=lastUnixTime;
     started = false;
@@ -677,7 +670,7 @@ bool getGpsData() {
     noGPS=true;
     if (LEDIsOn){digitalWrite(A0,LOW);delay(600);digitalWrite(A0,HIGH);
     }else{digitalWrite(A0,HIGH);LEDIsOn=true;}
-  return false;badCharCounter=0;}  
+  return false;}  
 }
 void getImei() {
   flushSim(); 
@@ -837,7 +830,7 @@ void writeDataFram(char* dataFram) {
       if ((test1==32)||(test1==0)||(test1!=int(dataFram[(i - framWritePosition)]))){
         fram.write8(i, 120);}
       }else if (test1!=int(dataFram[(i - framWritePosition)]))
-      {fram.write8(i, 120);}
+      {fram.write8(i, 122);}
 
   } framWritePosition += (dataFramSize) ; 
 }
