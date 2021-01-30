@@ -159,10 +159,10 @@ void setup() {
   pinMode(1, OUTPUT);//SS TX
   pinMode(6, OUTPUT);//sim Reset
   digitalWrite(6, HIGH);
-  // digitalWrite(A0, LOW);
   digitalWrite(A0, HIGH);
   LEDIsOn=true;
   digitalWrite(8, HIGH);
+  if(getCounter()>380){clearMemory(30999);clearMemoryDebug(32003);for(long i=32080;i<32180;i++){writeDataFramDebug("0",i);}}
   powerDown();
   powerUp();
   for (int i = 0; i <= 2; i++)
@@ -170,14 +170,9 @@ void setup() {
     if (!gpsCheck(180000)||(!gsmCheck(20000))){
       powerCycle();
       delay(5000);
-    }else{i=2;/*gprsOn();*/}    
+    }else{i=2;}    
   }
-  // Serial.begin(4800);
-  // // turnOnGns();
-  // while ((getGsmStat() != 1)&&(getGsmStat() != 5) ){
-  //   delay(500);
-  // }
-  // while (!gps());
+
 }
 void loop() {
   if(getCounter()>380){clearMemory(30999);clearMemoryDebug(32003);for(long i=32080;i<32180;i++){writeDataFramDebug("0",i);}powerCycle();}
@@ -234,7 +229,6 @@ void loop() {
   }else if(((t2 - t1) <= (ti/2))&&(getCounter()>=limitToSend)&&((t2 - t3) < (te-40))) {                          
       gprsOn();getGpsData(); 
       httpPostMaster();
-      // httpTimeout=20000;httpPostMaster();httpTimeout=8000;
       t3=t2;t1=t2;
       getGpsData();gprsOff();
   }
@@ -250,21 +244,6 @@ void powerCheck(){
     delay(3000);
     blinkLEDFast(10);powerCycle();}
   if (analogRead(A3)>200){return true;}else{return false;}
-// if (digitalRead(A3)==LOW)
-//   {
-//     digitalWrite(6, HIGH);
-//     digitalWrite(A0, HIGH);
-//     LEDIsOn=true;
-//     digitalWrite(8, HIGH);
-//     powerDown();
-//     powerUp();
-//     Serial.begin(4800);
-//     turnOnGns();
-//     while ((getGsmStat() != 1)&&(getGsmStat() != 5) ){
-//       delay(500);
-//     }
-//     while (!gps());
-//   }
 }
 void httpPostMaster(){
   httpPing();
@@ -525,7 +504,7 @@ void getWriteFromFramFromZero(uint16_t p1, uint16_t p2) {
 }
 void decrementCounter(uint16_t value) {
   int countVal = getCounter();
-  countVal -= value;
+  if (countVal>=value){countVal -= value;}else{countVal=0;}
   writeDataFramDebug(complete(String(countVal), 3).c_str(), 32000);
 }
 bool getGnsStat() {
@@ -835,7 +814,6 @@ void writeDataFram(char* dataFram) {
   } framWritePosition += (dataFramSize) ; 
 }
 void writeDataFramDebug(char* dataFram, long p1) {
-  //for (unsigned long i = p1; i <= (p1 + strlen(dataFram)); i++)
   for (unsigned long i = p1; i < (p1 + strlen(dataFram)); i++)
   {
     fram.write8(i, dataFram[(i - p1)]);
