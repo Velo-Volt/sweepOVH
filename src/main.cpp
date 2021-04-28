@@ -30,9 +30,9 @@
   int fixState = 0;
   int gnsState = 0;
   uint16_t gnsFailCounter = 0;
-  unsigned long previousMillisGps = 0;
+ unsigned long previousMillisGps = 0;
   const long intervalGps = 200000;
-  unsigned long currentMillis = 0;
+  unsigned long currentMillis = 0; 
   uint16_t gpsFailCounter = 0;
   bool started = true;
   bool restarted = false;
